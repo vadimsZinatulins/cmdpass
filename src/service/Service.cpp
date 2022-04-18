@@ -1,5 +1,7 @@
 #include "Service.h"
+#include "../ipc/Signal.h"
 #include "../config.h"
+#include "../ipc/NamedPipe.h"
 
 #include <csignal>
 #include <stdlib.h>
@@ -16,8 +18,7 @@ namespace service
 
 void termiate(int signal)
 {
-	// TODO
-	// Delete /var/run/cmdpassd.pid file
+	std::remove(PID_FILE_PATH);
 	
 	exit(EXIT_FAILURE);
 }
@@ -54,7 +55,7 @@ void Service::run()
 
 	while(true)
 	{
-		std::this_thread::sleep_for(2500ms);
+		std::string conent = ipc::NamedPipe::getContent();
 	}
 }
 

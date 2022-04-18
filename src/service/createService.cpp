@@ -3,6 +3,7 @@
 
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 
 namespace cmdpass
 {
@@ -24,6 +25,8 @@ void createService()
 	if(pid > 0) {
 		return;
 	}
+
+	umask(0);
 
 	// TODO:
 	// Open file logs here

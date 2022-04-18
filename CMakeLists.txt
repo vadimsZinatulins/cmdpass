@@ -11,9 +11,18 @@ configure_file(${PROJECT_SOURCE_DIR}/config/config.h.in ${PROJECT_SOURCE_DIR}/sr
 add_executable(
 	${PROJECT_NAME}
 	${PROJECT_SOURCE_DIR}/src/main.cpp
-	${PROJECT_SOURCE_DIR}/src/service/getService.cpp
+	${PROJECT_SOURCE_DIR}/src/config.h
+	${PROJECT_SOURCE_DIR}/src/service/createService.h
 	${PROJECT_SOURCE_DIR}/src/service/createService.cpp
+	${PROJECT_SOURCE_DIR}/src/service/getService.h
+	${PROJECT_SOURCE_DIR}/src/service/getService.cpp
+	${PROJECT_SOURCE_DIR}/src/service/serviceRequired.h
+	${PROJECT_SOURCE_DIR}/src/service/serviceRequired.cpp
+	${PROJECT_SOURCE_DIR}/src/service/Service.h
 	${PROJECT_SOURCE_DIR}/src/service/Service.cpp
+	${PROJECT_SOURCE_DIR}/src/ipc/Signal.h
+	${PROJECT_SOURCE_DIR}/src/ipc/NamedPipe.h
+	${PROJECT_SOURCE_DIR}/src/ipc/NamedPipe.cpp
 )
 
 set_target_properties(
