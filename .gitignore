@@ -1,3 +1,11 @@
+# Directories
+build/
+bin/
+.cache/
+
+# Links
+compile_commands.json
+
 # Prerequisites
 *.d
 
