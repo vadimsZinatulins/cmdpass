@@ -43,8 +43,15 @@ void Logger::logError(std::string message)
 	log("#### ERROR ####", std::move(message));
 }
 
+void Logger::setSource(std::string newSource)
+{
+	m_source = newSource;
+}
+
 void Logger::log(std::string type, std::string message)
 {
+	open();
+
 	if(m_output.is_open())
 	{
 		char timeBuffer[25];
@@ -55,8 +62,10 @@ void Logger::log(std::string type, std::string message)
 			time = "At " + std::string(timeBuffer) + '\n';
 		}
 
-		m_output << type << '\n' << time << message << '\n' << std::endl;
+		m_output << type << '\n' << "By [" << m_source << "] " << time << message << '\n' << std::endl;
 	}
+
+	close();
 }
 
 }

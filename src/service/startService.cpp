@@ -29,7 +29,7 @@ void startService()
 
 	umask(0);
 
-	utils::Logger::getInstance().open();
+	utils::Logger::getInstance().setSource("Server");
 
 	// Create new session ID for the child process
 	pid_t sid = setsid();

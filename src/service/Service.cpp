@@ -23,9 +23,6 @@ void termiate(int signal)
 {
 	utils::Logger::getInstance().logInfo("cmdpassd service is terminating!");
 
-	// Close the logger file
-	utils::Logger::getInstance().close();
-
 	std::remove(PID_FILE_PATH);
 	
 	exit(EXIT_FAILURE);
