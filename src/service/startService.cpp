@@ -1,4 +1,4 @@
-#include "createService.h"
+#include "startService.h"
 #include "Service.h"
 #include "../utils/Logger.h"
 
@@ -12,7 +12,7 @@ namespace cmdpass
 namespace service
 {
 
-void createService()
+void startService()
 {
 	// Fork of the parent process
 	pid_t pid = fork();
@@ -48,7 +48,7 @@ void createService()
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);
 
-	Service(pid).run();
+	Service(getpid()).run();
 }
 
 }

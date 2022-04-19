@@ -3,12 +3,14 @@
 #include "../config.h"
 #include "../ipc/NamedPipe.h"
 #include "../utils/Logger.h"
+#include "../utils/ArgParser.h"
 
 #include <csignal>
 #include <stdlib.h>
 #include <fstream>
 #include <iostream>
 #include <chrono>
+#include <string>
 #include <thread>
 
 namespace cmdpass
@@ -48,6 +50,8 @@ Service::Service(int pid)
 
 	pidFile << pid << std::endl;
 	pidFile.close();
+
+	utils::Logger::getInstance().logInfo("cmdpassd service initialized with PID: " + std::to_string(pid));
 }
 
 Service::~Service()
@@ -57,13 +61,18 @@ Service::~Service()
 
 void Service::run()
 {
-	utils::Logger::getInstance().logInfo("cmdpassd service is running!");
 
 	using namespace std::chrono_literals;
 
 	while(true)
 	{
-		std::string conent = ipc::NamedPipe::getContent();
+		std::string content = ipc::NamedPipe::readContent();
+		utils::Logger::getInstance().logInfo("Action received: " + content);
+
+		utils::ArgParser parser(std::move(content));
+		parser.add({ "stop" }, []{ termiate(0); });
+
+		parser.parse();
 	}
 }
 

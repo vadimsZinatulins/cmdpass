@@ -6,7 +6,7 @@ namespace cmdpass
 namespace service
 {
 
-void serviceRequired();
+void stopService();
 
 }
 

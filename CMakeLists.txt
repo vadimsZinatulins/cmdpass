@@ -12,12 +12,12 @@ add_executable(
 	${PROJECT_NAME}
 	${PROJECT_SOURCE_DIR}/src/main.cpp
 	${PROJECT_SOURCE_DIR}/src/config.h
-	${PROJECT_SOURCE_DIR}/src/service/createService.h
-	${PROJECT_SOURCE_DIR}/src/service/createService.cpp
+	${PROJECT_SOURCE_DIR}/src/service/startService.h
+	${PROJECT_SOURCE_DIR}/src/service/startService.cpp
+	${PROJECT_SOURCE_DIR}/src/service/stopService.h
+	${PROJECT_SOURCE_DIR}/src/service/stopService.cpp
 	${PROJECT_SOURCE_DIR}/src/service/getService.h
 	${PROJECT_SOURCE_DIR}/src/service/getService.cpp
-	${PROJECT_SOURCE_DIR}/src/service/serviceRequired.h
-	${PROJECT_SOURCE_DIR}/src/service/serviceRequired.cpp
 	${PROJECT_SOURCE_DIR}/src/service/Service.h
 	${PROJECT_SOURCE_DIR}/src/service/Service.cpp
 	${PROJECT_SOURCE_DIR}/src/ipc/Signal.h
@@ -25,6 +25,8 @@ add_executable(
 	${PROJECT_SOURCE_DIR}/src/ipc/NamedPipe.cpp
 	${PROJECT_SOURCE_DIR}/src/utils/Logger.h
 	${PROJECT_SOURCE_DIR}/src/utils/Logger.cpp
+	${PROJECT_SOURCE_DIR}/src/utils/ArgParser.h
+	${PROJECT_SOURCE_DIR}/src/utils/ArgParser.cpp
 )
 
 set_target_properties(
