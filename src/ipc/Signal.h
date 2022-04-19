@@ -1,5 +1,8 @@
 #pragma once
 
+#include "../service/getService.h"
+#include "../utils/Logger.h"
+
 #include <mutex>
 #include <condition_variable>
 #include <csignal>
@@ -29,6 +32,18 @@ public:
 		m_cv.wait(lock, [this]{ return m_isSet; });
 
 		m_isSet = false;
+	}
+
+	void send()
+	{
+		unsigned int pid = service::getService();
+		if(!pid)
+		{
+			utils::Logger::getInstance().logError("No cmdpassd service found.");
+			return;
+		}
+
+		kill(pid, static_cast<int>(type));
 	}
 private:
 	Signal() : m_isSet(false)
