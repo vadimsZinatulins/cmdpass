@@ -23,6 +23,8 @@ add_executable(
 	${PROJECT_SOURCE_DIR}/src/ipc/Signal.h
 	${PROJECT_SOURCE_DIR}/src/ipc/NamedPipe.h
 	${PROJECT_SOURCE_DIR}/src/ipc/NamedPipe.cpp
+	${PROJECT_SOURCE_DIR}/src/utils/Logger.h
+	${PROJECT_SOURCE_DIR}/src/utils/Logger.cpp
 )
 
 set_target_properties(

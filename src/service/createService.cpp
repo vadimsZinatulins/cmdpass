@@ -1,5 +1,6 @@
 #include "createService.h"
 #include "Service.h"
+#include "../utils/Logger.h"
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -28,8 +29,7 @@ void createService()
 
 	umask(0);
 
-	// TODO:
-	// Open file logs here
+	utils::Logger::getInstance().open();
 
 	// Create new session ID for the child process
 	pid_t sid = setsid();

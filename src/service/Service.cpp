@@ -2,6 +2,7 @@
 #include "../ipc/Signal.h"
 #include "../config.h"
 #include "../ipc/NamedPipe.h"
+#include "../utils/Logger.h"
 
 #include <csignal>
 #include <stdlib.h>
@@ -18,6 +19,11 @@ namespace service
 
 void termiate(int signal)
 {
+	utils::Logger::getInstance().logInfo("cmdpassd service is terminating!");
+
+	// Close the logger file
+	utils::Logger::getInstance().close();
+
 	std::remove(PID_FILE_PATH);
 	
 	exit(EXIT_FAILURE);
@@ -36,7 +42,7 @@ Service::Service(int pid)
 	std::ofstream pidFile(PID_FILE_PATH);
 	if(pidFile.fail())
 	{
-		std::cout << "Failed to create pid file" << std::endl;
+		utils::Logger::getInstance().logError("Failed to create PID file");
 		exit(EXIT_FAILURE);
 	}
 
@@ -51,6 +57,8 @@ Service::~Service()
 
 void Service::run()
 {
+	utils::Logger::getInstance().logInfo("cmdpassd service is running!");
+
 	using namespace std::chrono_literals;
 
 	while(true)
