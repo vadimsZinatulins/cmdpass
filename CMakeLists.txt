@@ -12,12 +12,6 @@ add_executable(
 	${PROJECT_NAME}
 	${PROJECT_SOURCE_DIR}/src/main.cpp
 	${PROJECT_SOURCE_DIR}/src/config.h
-	${PROJECT_SOURCE_DIR}/src/service/startService.h
-	${PROJECT_SOURCE_DIR}/src/service/startService.cpp
-	${PROJECT_SOURCE_DIR}/src/service/stopService.h
-	${PROJECT_SOURCE_DIR}/src/service/stopService.cpp
-	${PROJECT_SOURCE_DIR}/src/service/getService.h
-	${PROJECT_SOURCE_DIR}/src/service/getService.cpp
 	${PROJECT_SOURCE_DIR}/src/service/Service.h
 	${PROJECT_SOURCE_DIR}/src/service/Service.cpp
 	${PROJECT_SOURCE_DIR}/src/ipc/Signal.h

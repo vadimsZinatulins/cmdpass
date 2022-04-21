@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../service/getService.h"
 #include "../utils/Logger.h"
 
 #include <mutex>
@@ -15,7 +14,7 @@ namespace ipc
 
 enum class SignalType { User1 = SIGUSR1, User2 = SIGUSR2 };
 
-template<SignalType type>
+template<SignalType waitForSignal, SignalType notifySignal>
 class Signal
 {
 public:
@@ -34,21 +33,15 @@ public:
 		m_isSet = false;
 	}
 
-	void send()
+	void notify(unsigned int pid)
 	{
-		unsigned int pid = service::getService();
-		if(!pid)
-		{
-			utils::Logger::getInstance().logError("No cmdpassd service found.");
-			return;
-		}
-
-		kill(pid, static_cast<int>(type));
+		kill(pid, static_cast<int>(waitForSignal));
 	}
+
 private:
 	Signal() : m_isSet(false)
 	{
-		std::signal(static_cast<int>(type), [](int signal){	Signal<type>::getInstance().set(); });
+		std::signal(static_cast<int>(waitForSignal), [](int signal){	Signal<waitForSignal, notifySignal>::getInstance().set(); });
 	}
 
 	~Signal()

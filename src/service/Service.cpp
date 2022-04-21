@@ -3,15 +3,14 @@
 #include "../config.h"
 #include "../ipc/NamedPipe.h"
 #include "../utils/Logger.h"
-#include "../utils/ArgParser.h"
 
 #include <csignal>
 #include <stdlib.h>
 #include <fstream>
-#include <iostream>
-#include <chrono>
 #include <string>
-#include <thread>
+#include <sstream>
+#include <vector>
+#include <sys/stat.h>
 
 namespace cmdpass
 {
@@ -59,6 +58,70 @@ Service::~Service()
 
 }
 
+void Service::startService()
+{
+	// Fork of the parent process
+	pid_t pid = fork();
+
+	// Exit if failed to create child process
+	if(pid < 0) {
+		exit(EXIT_FAILURE);
+	}
+
+	// Return to the caller
+	if(pid > 0) {
+		return;
+	}
+
+	umask(0);
+
+	utils::Logger::getInstance().open();
+
+	// Create new session ID for the child process
+	pid_t sid = setsid();
+	if(sid < 0) {
+		exit(EXIT_FAILURE);
+	}
+
+	// Change current working directory
+	if(chdir("/") < 0)
+	{
+		exit(EXIT_FAILURE);
+	}
+
+	// Close standard file descriptors
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
+
+	Service(getpid()).run();
+}
+
+void Service::stopService()
+{
+	unsigned int servicePid = getService();
+	if(servicePid)
+	{
+		ipc::NamedPipe::writeContent("stop");
+		ipc::Signal<ipc::SignalType::User1, ipc::SignalType::User2>::getInstance().notify(servicePid);
+	}
+}
+
+unsigned int Service::getService()
+{
+	std::ifstream pidFile(PID_FILE_PATH);
+	if(pidFile.fail())
+	{
+		return 0;
+	}
+
+	int pid;
+	pidFile >> pid;
+	pidFile.close();
+
+	return pid;
+}
+
 void Service::run()
 {
 
@@ -66,13 +129,16 @@ void Service::run()
 
 	while(true)
 	{
-		std::string content = ipc::NamedPipe::readContent();
-		utils::Logger::getInstance().logInfo("Action received: " + content);
+		ipc::Signal<ipc::SignalType::User1, ipc::SignalType::User2>::getInstance().wait();
+		std::vector<std::string> parameters;
+		{
+			std::stringstream ss(std::move(ipc::NamedPipe::readContent()));
+			std::string param;
+			while(ss >> param) parameters.push_back(std::move(param));
+		}
 
-		utils::ArgParser parser(std::move(content));
-		parser.add({ "stop" }, []{ termiate(0); });
-
-		parser.parse();
+		utils::Logger::getInstance().logInfo("New action from pid: " + parameters[0]);
+		if(parameters[1] == "stop") termiate(0);
 	}
 }
 

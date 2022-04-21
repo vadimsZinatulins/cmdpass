@@ -1,7 +1,6 @@
 #include "NamedPipe.h"
 #include "../config.h"
 #include "../utils/Logger.h"
-#include "Signal.h"
 
 #include <cstdio>
 #include <ios>
@@ -16,8 +15,6 @@ namespace ipc
 
 std::string NamedPipe::readContent()
 {
-	Signal<SignalType::User1>::getInstance().wait();
-
 	std::ifstream file(PIPE_FILE_PATH);
 	if(file.fail())
 	{
@@ -48,8 +45,6 @@ void NamedPipe::writeContent(std::string content)
 
 	file << content << std::endl;
 	file.close();
-
-	Signal<SignalType::User1>::getInstance().send();
 }
 
 }
